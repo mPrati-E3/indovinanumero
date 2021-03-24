@@ -15,7 +15,6 @@ public class FXMLController {
 	private final int TMAX = 8;
 	private int segreto;
 	private int tentativiUtente;
-	private boolean inGioco = false;
 
     @FXML
     private ResourceBundle resources;
@@ -50,8 +49,6 @@ public class FXMLController {
     	this.segreto = (int)(Math.random() * NMAX)+1;
     	//azzera i tentativi dell'utente
     	this.tentativiUtente=0;
-    	//attiva la modalità di gioco
-    	this.inGioco=true;
     	
     	//------------Pulizia e reset dell'interfaccia------------
     	hboxProva.setDisable(false);
@@ -81,7 +78,6 @@ public class FXMLController {
     	if (TentativoAttualeI == this.segreto) {
     		txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+tentativiUtente+" tentativi \n");
     		hboxProva.setDisable(true);
-    		this.inGioco=false;
     		return;
     	}
     	
@@ -89,7 +85,6 @@ public class FXMLController {
     	if (tentativiUtente == TMAX) {
     		txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+this.segreto+"\n");
     		hboxProva.setDisable(true);
-    		this.inGioco=false;
     		return;
     	}
     	
