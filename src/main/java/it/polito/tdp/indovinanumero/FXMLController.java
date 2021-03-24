@@ -44,10 +44,16 @@ public class FXMLController {
     @FXML
     void doNuova(ActionEvent event) {
     	
+    	//------------Set della logica del gioco------------
+    	
+    	//genera numero segreto
     	this.segreto = (int)(Math.random() * NMAX)+1;
+    	//azzera i tentativi dell'utente
     	this.tentativiUtente=0;
+    	//attiva la modalità di gioco
     	this.inGioco=true;
     	
+    	//------------Pulizia e reset dell'interfaccia------------
     	hboxProva.setDisable(false);
     	txtTentativiFatti.clear();
     	txtTentativo.clear();
@@ -58,6 +64,7 @@ public class FXMLController {
     @FXML
     void doProva(ActionEvent event) {
     	
+    	//prendo l'input dell'utente 
     	String TentativoAttualeS = txtTentativo.getText();
     	int TentativoAttualeI;
     	try {
@@ -67,8 +74,10 @@ public class FXMLController {
     		return;
     	}
     	
+    	//aumento i tentativi fatti dall'utente
     	this.tentativiUtente++;
     	
+    	//l'utente ha indovinato correttamente
     	if (TentativoAttualeI == this.segreto) {
     		txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+tentativiUtente+" tentativi \n");
     		hboxProva.setDisable(true);
@@ -76,6 +85,7 @@ public class FXMLController {
     		return;
     	}
     	
+    	//l'utente ha esaurito i tentativi
     	if (tentativiUtente == TMAX) {
     		txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+this.segreto+"\n");
     		hboxProva.setDisable(true);
@@ -83,12 +93,14 @@ public class FXMLController {
     		return;
     	}
     	
+    	//l'utente ha fatto un tentativo non corretto e non ha esaurito i tentativi
     	if (TentativoAttualeI<this.segreto) {
     		txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo basso \n");
     	} else {
     		txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo alto \n");
     	}
     	
+    	//diminuisco il numero di tentativi rimasti
     	txtRimasti.setText(Integer.toString(TMAX-tentativiUtente));
     	
     }
