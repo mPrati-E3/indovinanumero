@@ -1,6 +1,7 @@
 package it.polito.tdp.indovinanumero;
 
 import java.net.URL;
+
 import java.util.ResourceBundle;
 
 import it.polito.tdp.indovinanumero.model.Model;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Label;
 
 public class FXMLController {
 	
@@ -17,6 +19,12 @@ public class FXMLController {
 
     @FXML
     private ResourceBundle resources;
+    
+    @FXML
+    private Label lblRimasti;
+    
+    @FXML
+    private Label lblInterv;
 
     @FXML
     private URL location;
@@ -49,7 +57,9 @@ public class FXMLController {
     	hboxProva.setDisable(false);
     	txtTentativiFatti.clear();
     	txtTentativo.clear();
-    	txtRimasti.setText(Integer.toString(model.getTMAX()));
+    	txtTentativiFatti.setText("Inizio di una nuova partita! \n");
+    	lblRimasti.setText("Tentativi Rimasti: "+(model.getTMAX()-model.getTU())+"/"+model.getTMAX());
+    	lblInterv.setText("Intervallo: "+model.getAm()+" - "+model.getAM());
     	
     }
 
@@ -71,6 +81,7 @@ public class FXMLController {
     	switch (this.model.FaiTentativo(TentativoAttualeI)) {
     		case -1: 
     			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo basso \n");
+    			lblInterv.setText("Intervallo: "+model.getAm()+" - "+model.getAM());
     			break;
     		case 0:
     			txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+(model.getTU())+" tentativi \n");
@@ -78,6 +89,7 @@ public class FXMLController {
         		break;
     		case 1:
     			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo alto \n");
+    			lblInterv.setText("Intervallo: "+model.getAm()+" - "+model.getAM());
     			break;
     		case 2:
     			txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+model.getSegreto()+"\n");
@@ -92,7 +104,7 @@ public class FXMLController {
     	}
 
     	//diminuisco il numero di tentativi rimasti
-    	txtRimasti.setText(Integer.toString(this.model.quantiRimasti()));
+    	lblRimasti.setText("Tentativi Rimasti: "+(model.getTMAX()-model.getTU())+"/"+model.getTMAX());
     	
     	txtTentativo.clear();
     	
@@ -102,10 +114,11 @@ public class FXMLController {
     void initialize() {
         assert txtTentativiFatti != null : "fx:id=\"txtTentativiFatti\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnNuova != null : "fx:id=\"btnNuova\" was not injected: check your FXML file 'Scene.fxml'.";
-        assert txtRimasti != null : "fx:id=\"txtRimasti\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert lblRimasti != null : "fx:id=\"txtRimasti\" was not injected: check your FXML file 'Scene.fxml'.";
         assert hboxProva != null : "fx:id=\"hboxProva\" was not injected: check your FXML file 'Scene.fxml'.";
         assert txtTentativo != null : "fx:id=\"txtTentativo\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnProva != null : "fx:id=\"btnProva\" was not injected: check your FXML file 'Scene.fxml'.";
+        assert lblInterv != null : "fx:id=\"txtRimasti\" was not injected: check your FXML file 'Scene.fxml'.";
 
     }
     

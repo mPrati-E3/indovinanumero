@@ -1,11 +1,18 @@
 package it.polito.tdp.indovinanumero.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Model {
 	
 	private final int NMAX = 100;
 	private final int TMAX = 8;
 	private int segreto;
 	private int tentativiUtente;
+	private int actualMAX = NMAX;
+	private int actualMIN = 1;
+	
+	private Set<Integer> tentInser;
 	
 	public Model () {
 		this.tentativiUtente=0;
@@ -18,6 +25,11 @@ public class Model {
     	this.segreto = (int)(Math.random() * NMAX)+1;
     	//azzera i tentativi dell'utente
     	this.tentativiUtente=0;
+    	
+    	this.actualMAX = this.NMAX;
+    	this.actualMIN = 1;
+    	
+    	this.tentInser = new HashSet<Integer>();
 	}
 	
 	public int FaiTentativo(int t) {
@@ -29,6 +41,8 @@ public class Model {
 		
     	//aumento i tentativi fatti dall'utente
     	this.tentativiUtente++;
+    	
+    	this.tentInser.add(t);
     	
     	//l'utente ha indovinato correttamente
     	if (t == this.segreto) {
@@ -42,8 +56,10 @@ public class Model {
     	
     	//l'utente ha fatto un tentativo non corretto e non ha esaurito i tentativi
     	if (t<this.segreto) {
+    		this.actualMIN=t;
     		return -1;
     	} else {
+    		actualMAX=t;
     		return 1;
     	}
     	
@@ -64,9 +80,24 @@ public class Model {
 		return this.TMAX;
 	}
 	
+	//ritorna al controller il massimo attuale
+	public int getAM() {
+		return this.actualMAX;
+	}
+	
+	//ritorna al controller i minimo attuale
+	public int getAm() {
+		return this.actualMIN;
+	}
+	
+	
 	//valuta se il tentativo è valido (è nell'intervallo)
 	private boolean tentativoValido(int t) {
-		if (t<1 || t>NMAX) {
+		if (t<this.actualMIN || t>this.actualMAX) {
+			return false;
+		}
+		
+		if (this.tentInser.contains(t)) {
 			return false;
 		}
 		
