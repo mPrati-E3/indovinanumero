@@ -14,11 +14,6 @@ import javafx.scene.layout.HBox;
 public class FXMLController {
 	
 	private Model model;
-	
-	private final int NMAX = 100;
-	private final int TMAX = 8;
-	private int segreto;
-	private int tentativiUtente;
 
     @FXML
     private ResourceBundle resources;
@@ -47,25 +42,21 @@ public class FXMLController {
     @FXML
     void doNuova(ActionEvent event) {
     	
-    	//------------Set della logica del gioco------------
-    	
-    	//genera numero segreto
-    	this.segreto = (int)(Math.random() * NMAX)+1;
-    	//azzera i tentativi dell'utente
-    	this.tentativiUtente=0;
+    	//fai partire la logica del gioco dal modello
+    	model.NuovaPartita();
     	
     	//------------Pulizia e reset dell'interfaccia------------
     	hboxProva.setDisable(false);
     	txtTentativiFatti.clear();
     	txtTentativo.clear();
-    	txtRimasti.setText(Integer.toString(TMAX));
+    	txtRimasti.setText(Integer.toString(model.getTMAX()));
     	
     }
 
     @FXML
     void doProva(ActionEvent event) {
     	
-    	//prendo l'input dell'utente 
+    	//prendo l'input dell'utente e mi assicuro sia un integer
     	String TentativoAttualeS = txtTentativo.getText();
     	int TentativoAttualeI;
     	try {
@@ -75,32 +66,34 @@ public class FXMLController {
     		return;
     	}
     	
-    	//aumento i tentativi fatti dall'utente
-    	this.tentativiUtente++;
-    	
-    	//l'utente ha indovinato correttamente
-    	if (TentativoAttualeI == this.segreto) {
-    		txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+tentativiUtente+" tentativi \n");
-    		hboxProva.setDisable(true);
-    		return;
-    	}
-    	
-    	//l'utente ha esaurito i tentativi
-    	if (tentativiUtente == TMAX) {
-    		txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+this.segreto+"\n");
-    		hboxProva.setDisable(true);
-    		return;
-    	}
-    	
-    	//l'utente ha fatto un tentativo non corretto e non ha esaurito i tentativi
-    	if (TentativoAttualeI<this.segreto) {
-    		txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo basso \n");
-    	} else {
-    		txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo alto \n");
-    	}
-    	
     	//diminuisco il numero di tentativi rimasti
-    	txtRimasti.setText(Integer.toString(TMAX-tentativiUtente));
+    	txtRimasti.setText(Integer.toString(this.model.quantiRimasti()));
+    	
+    	//mi comporto diversamente a seconda del return del metodo principale del modello
+    	switch (this.model.FaiTentativo(TentativoAttualeI)) {
+    		case -1: 
+    			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo basso \n");
+    			break;
+    		case 0:
+    			txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+(model.getTU()-1)+" tentativi \n");
+        		hboxProva.setDisable(true);
+        		return;
+    		case 1:
+    			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo alto \n");
+    			break;
+    		case 2:
+    			txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+model.getSegreto()+"\n");
+        		hboxProva.setDisable(true);
+        		return;
+    		case 3:
+    			txtTentativiFatti.appendText("Il tentativo fatto non è valido! \n");
+    			break;
+    		default:
+    			txtTentativiFatti.appendText("Errore sconosciuto \n");
+    			break;
+    	}
+
+    
     	
     }
 
