@@ -2,6 +2,8 @@ package it.polito.tdp.indovinanumero;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import it.polito.tdp.indovinanumero.model.Model;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,12 +14,30 @@ public class EntryPoint extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
-        
+    	
+    	//creo il modello 
+    	Model model = new Model();
+    	//definisco il controller
+    	FXMLController controller;
+    	
+    	//definisco il loader e lo assegno con ciò che prendo dalla scene
+    	FXMLLoader loader= new FXMLLoader(getClass().getResource("/fxml/Scene.fxml"));
+    	
+        //Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+    	//estraggo la radice direttamente del loader che ho fatto prima
+    	Parent root = loader.load();
+    	
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
+    	
+    	//dal loader estraggo il controller e lo assegno alla variabile dedicata
+    	controller=loader.getController();
+    	//chiamo il metodo del controller che mi setta il model
+    	controller.setModel(model);
+    
         
-        stage.setTitle("JavaFX and Maven");
+        //scene.getStylesheets().add("/styles/Styles.css");
+        
+        stage.setTitle("Indovina il numero");
         stage.setScene(scene);
         stage.show();
     }
