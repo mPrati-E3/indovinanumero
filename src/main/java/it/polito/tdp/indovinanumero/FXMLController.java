@@ -63,11 +63,9 @@ public class FXMLController {
     		TentativoAttualeI = Integer.parseInt(TentativoAttualeS);
     	} catch (NumberFormatException e) {
     		txtTentativiFatti.appendText("Devi inserire un valore numerico! \n");
+    		txtTentativo.clear();
     		return;
     	}
-    	
-    	//diminuisco il numero di tentativi rimasti
-    	txtRimasti.setText(Integer.toString(this.model.quantiRimasti()));
     	
     	//mi comporto diversamente a seconda del return del metodo principale del modello
     	switch (this.model.FaiTentativo(TentativoAttualeI)) {
@@ -75,16 +73,16 @@ public class FXMLController {
     			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo basso \n");
     			break;
     		case 0:
-    			txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+(model.getTU()-1)+" tentativi \n");
+    			txtTentativiFatti.appendText("Hai vinto! Hai utilizzato: "+(model.getTU())+" tentativi \n");
         		hboxProva.setDisable(true);
-        		return;
+        		break;
     		case 1:
     			txtTentativiFatti.appendText(TentativoAttualeI+": Tentativo troppo alto \n");
     			break;
     		case 2:
     			txtTentativiFatti.appendText("Hai perso! Il numero segreto era: "+model.getSegreto()+"\n");
         		hboxProva.setDisable(true);
-        		return;
+        		break;
     		case 3:
     			txtTentativiFatti.appendText("Il tentativo fatto non è valido! \n");
     			break;
@@ -93,7 +91,10 @@ public class FXMLController {
     			break;
     	}
 
-    
+    	//diminuisco il numero di tentativi rimasti
+    	txtRimasti.setText(Integer.toString(this.model.quantiRimasti()));
+    	
+    	txtTentativo.clear();
     	
     }
 
